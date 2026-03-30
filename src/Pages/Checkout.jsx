@@ -46,12 +46,7 @@ const Checkout = () => {
                 </div>
 
                 <button onClick={handlePay} style={styles.payButton}>
-                    <img
-                        src="https://www.logo.wine/a/logo/BKash/BKash-Icon-Logo.wine.svg"
-                        alt="bKash"
-                        style={styles.btnIcon}
-                    /> 🔵 // Added bKash logo icon for better UI
-                    Pay with bKash
+                    Pay Now
                 </button>
 
                 <p style={styles.footerNote}>Powered by SSLCommerz Sandbox</p>
