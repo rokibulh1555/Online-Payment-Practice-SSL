@@ -1,150 +1,61 @@
-import React, { useState } from 'react'; // Added useState to track input amount
-import axios from 'axios';
+import {useState} from "react";
+import axios from "axios";
+
 
 const Checkout = () => {
-    const [amount, setAmount] = useState(500);// Default amount set to 500
+
+    const [amount, setAmount ] = useState(500);
 
     const handlePay = async () => {
-        if (amount < 10) {// Basic validation to prevent tiny payments
-            alert("Minimum amount is 10 BDT");
+        if(!amount || amount < 10) {
+            alert("Please enter a valid amount (Minimum 15 BDT)");
             return;
         }
-
         try {
-            const res = await axios.post('http://localhost:5000/payment/init', { amount: Number(amount) }); // Sending dynamic amount to backend
-            if (res.data.url) {
+            const res = await axios.post('http://localhost:5000/payment/init', { amount: Number(amount)});
+            if( res.data.url ) {
                 window.location.replace(res.data.url);
             }
-        } catch (err) {
-            console.error("Payment initiation failed:", err);
-            alert("Connection error. Is your backend running on port 5000?");
+        } catch (error) {
+            console.error(error);
+            alert("Server Error. Ensure Node.js backend is running.");
         }
     };
 
     return (
-        <div style={styles.container}>
-            <div style={styles.card}>
-                <div style={styles.header}>
-                    <h2 style={styles.title}>Secure Checkout</h2>
-                    <p style={styles.subtitle}>Practice SSLCommerz Sandbox</p>
+        <div className={'container d-flex justify-content-center align-items-center vh-100'} style={{ backgroundColor: ''}}>
+            <div className={'card shadow-sm p-4'} style={{ maxWidth: '400px', width: '100%', borderRadius: '15px'}}>
+                <div className={'text-center mb-4'}>
+                    <h3 className={'fw-bold'}>Make Your Payment</h3>
+                    <p className={'text-muted small'}>SSLCommerz Sandbox Mode</p>
                 </div>
 
-                <div style={styles.inputGroup}>
-                    <label style={styles.label}>Enter Amount (BDT)</label>
+                <div className={'mb-3'}>
+                    <label className={'form-label fw-semibold'}>Amount (BDT)</label>
                     <input
-                        type="number"
+                        type={'number'}
+                        className={'form-control form-control-lg'}
                         value={amount}
-                        onChange={(e) => setAmount(e.target.value)} // Update state on input change
-                    style={styles.input}
-                    placeholder="e.g. 500"
+                        onChange={(e) => setAmount(e.target.value)}
                     />
                 </div>
 
-                <div style={styles.summary}>
-                    <span>Total Payable:</span>
-                    <span style={styles.totalAmount}>{amount || 0} ৳</span>
+                <div className={'d-flex justify-content-between mb-4 border-top pt-3'}>
+                    <span className={'text-secondary'}>Payable</span>
+                    <span className={'fw-bold text-primary'}>{amount || 0} ৳</span>
                 </div>
 
-                <button onClick={handlePay} style={styles.payButton}>
+                <button
+                    onClick={handlePay}
+                    className={'btn btn-lg w-100 text-white fw-bold'}
+                    style={{ backgroundColor: '#e2136e'}}
+                >
                     Pay Now
                 </button>
 
-                <p style={styles.footerNote}>Powered by SSLCommerz Sandbox</p>
             </div>
         </div>
-    );
-};
-
-const styles = {
-    container: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#f4f7f6',
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
-    },
-    card: {
-        backgroundColor: '#fff',
-        padding: '40px',
-        borderRadius: '16px',
-        boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-        width: '100%',
-        maxWidth: '400px',
-        textAlign: 'center'
-    },
-    header: {
-        marginBottom: '30px'
-    },
-    title: {
-        margin: '0',
-        color: '#333',
-        fontSize: '24px'
-    },
-    subtitle: {
-        color: '#777',
-        fontSize: '14px',
-        marginTop: '5px'
-    },
-    inputGroup: {
-        textAlign: 'left',
-        marginBottom: '25px'
-    },
-    label: {
-        display: 'block',
-        fontSize: '14px',
-        fontWeight: '600',
-        color: '#555',
-        marginBottom: '8px'
-    },
-    input: {
-        width: '100%',
-        padding: '12px 15px',
-        borderRadius: '8px',
-        border: '1px solid #ddd',
-        fontSize: '16px',
-        outline: 'none',
-        transition: 'border-color 0.3s',
-        boxSizing: 'border-box'
-    },
-    summary: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '15px 0',
-        borderTop: '1px solid #eee',
-        marginBottom: '25px',
-        fontSize: '18px',
-        fontWeight: 'bold',
-        color: '#333'
-    },
-    totalAmount: {
-        color: '#e2136e'
-    },
-    payButton: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        backgroundColor: '#e2136e',
-        color: 'white',
-        border: 'none',
-        padding: '15px',
-        borderRadius: '8px',
-        fontSize: '18px',
-        fontWeight: '600',
-        cursor: 'pointer',
-        transition: 'background 0.3s'
-    },
-    btnIcon: {
-        height: '24px',
-        marginRight: '10px'
-    },
-    footerNote: {
-        fontSize: '12px',
-        color: '#aaa',
-        marginTop: '20px'
-    }
-};
+    )
+}
 
 export default Checkout;
